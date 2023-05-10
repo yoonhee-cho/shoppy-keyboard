@@ -1,24 +1,55 @@
-import logo from './logo.svg';
 import './App.css';
+import HomePage from './pages/HomePage';
+import ErrorPage from './pages/ErrorPage';
+import ProtectedRoute from './pages/ProtectedRoute';
+
+import Home from './components/Home';
+import Products from './components/Products';
+import ProductDetail from './components/ProductDetail';
+import AddNewProduct from './components/AddNewProduct';
+import Cart from './components/Cart';
+
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <HomePage />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: '/',
+        element: <Home />
+      },
+      {
+        path: '/products',
+        element: <Products/>
+      },
+      {
+        path: '/products/:productId',
+        element: <ProductDetail />
+      },
+      {
+        path: '/newproducts',
+        element: 
+          <ProtectedRoute requireAdmin={true}>
+            <AddNewProduct />
+          </ProtectedRoute>
+      },
+      {
+        path: '/cart',
+        element: 
+        <ProtectedRoute requireAdmin={false}>
+          <Cart />
+        </ProtectedRoute>
+      }
+    ]
+  }
+]);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RouterProvider router={router}/>
   );
 }
 
